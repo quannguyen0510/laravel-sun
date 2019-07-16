@@ -21,4 +21,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::group(['prefix'=>'players', 'middleware'=>'auth'], function () {
     Route::get('add', 'PlayerController@create');
     Route::post('add', 'PlayerController@store');
+
+    Route::get('edit/{id}', 'PlayerController@show');
+    Route::post('edit/{id}', 'PlayerController@edit');
 });

@@ -71,7 +71,7 @@ class PlayerController extends Controller
 
         $player->save();
 
-        return redirect('players/add')->with('thongbao', 'Them thanh cong');
+        return redirect('players/add')->with('thongbao', 'Create player success');
 
     }
 
@@ -84,6 +84,8 @@ class PlayerController extends Controller
     public function show($id)
     {
         //
+        $ply = Player::find($id);
+        return view('players.edit', ['ply' => $ply]);
     }
 
     /**
@@ -92,9 +94,43 @@ class PlayerController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
         //
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|max:255',
+            'birthday' => 'required',
+            'gender' => 'required',
+            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect('players/edit/'.$id)
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $player = Player::find($id);
+        $player->name = $request->name;
+        $player->birthday = $request->birthday;
+        $player->gender = $request->gender;
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $name = $file->getClientOriginalName();
+            $image = str_random(4) . "_" . $name;
+            while (file_exists('upload/player' . $image)) {
+                $image = str_random(4) . "_" . $name;
+            }
+            $file->move('upload/player', $image);
+            $player->image = $image;
+        } else {
+
+        }
+
+        $player->save();
+
+        return redirect('players/edit/'.$id)->with('thongbao', 'Update player success');
     }
 
     /**

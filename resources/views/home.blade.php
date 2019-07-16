@@ -47,7 +47,7 @@
                             @endforeach
                             </tbody>
                         </table>
-
+                    <a class="btn btn-primary" href="players/add">Create new record</a>
                     </div>
                 </div>
             </div>

@@ -9,6 +9,10 @@
         .input {
             width: 50%;
         }
+        .img {
+            width: 300px;
+            padding: 10px;
+        }
     </style>
 @endsection
 
@@ -28,30 +32,33 @@
                 {{session('thongbao')}}
             </div>
         @endif
-        <form action="players/add" method="POST" enctype="multipart/form-data">
+        <form action="players/edit/{{$ply->id}}" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="_token" value="{{csrf_token()}}">
             <table border="1px" width="80%">
                 <tr>
                     <th>Name</th>
-                    <td><input class="input" type="text" name="name"></td>
+                    <td><input class="input" type="text" name="name" value="{{$ply->name}}"></td>
                 </tr>
                 <tr>
                     <th>Birthday</th>
-                    <td><input class="input" type="date" name="birthday"></td>
+                    <td><input class="input" type="date" name="birthday" value="{{$ply->birthday}}"></td>
                 </tr>
                 <tr>
                     <th>Gender</th>
-                    <td><input name="gender" value="1" checked="" type="radio">Male
-                        <input name="gender" value="0" type="radio">Female
+                    <td><input name="gender" @if($ply->gender == 1) {{'checked'}} @endif  value="1" type="radio">Male
+                        <input name="gender" @if($ply->gender == 0) {{'checked'}} @endif  value="0" type="radio">Female
                     </td>
                 </tr>
                 <tr>
                     <th>Image</th>
-                    <td><input type="file" name="image"></td>
+                    <td><img class="img" name="image" src="upload/player/{{$ply->image}}">
+                        <input type="file" name="image">
+                    </td>
                 </tr>
             </table>
             <br>
-            <button type="submit" class="btn btn-default">Create</button>
+            <button type="submit" class="btn btn-default">Update</button>
         </form>
     </div>
 @endsection
+
