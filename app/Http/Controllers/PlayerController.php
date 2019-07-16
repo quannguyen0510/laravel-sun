@@ -84,8 +84,6 @@ class PlayerController extends Controller
     public function show($id)
     {
         //
-        $ply = Player::find($id);
-        return view('players.edit', ['ply' => $ply]);
     }
 
     /**
@@ -97,6 +95,20 @@ class PlayerController extends Controller
     public function edit(Request $request, $id)
     {
         //
+        $ply = Player::find($id);
+        return view('players.edit', ['ply' => $ply]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:255',
             'birthday' => 'required',
@@ -105,7 +117,7 @@ class PlayerController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect('players/edit/'.$id)
+            return redirect('players/edit/' . $id)
                 ->withErrors($validator)
                 ->withInput();
         }
@@ -130,19 +142,7 @@ class PlayerController extends Controller
 
         $player->save();
 
-        return redirect('players/edit/'.$id)->with('thongbao', 'Update player success');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+        return redirect('players/edit/' . $id)->with('thongbao', 'Update player success');
     }
 
     /**
@@ -154,5 +154,9 @@ class PlayerController extends Controller
     public function destroy($id)
     {
         //
+        $ply = Player::find($id);
+        $ply->delete();
+
+        return redirect('home')->with('thongbao', 'Delete player success');
     }
 }

@@ -14,7 +14,11 @@
                                 {{ session('status') }}
                             </div>
                         @endif
-
+                        @if(session('thongbao'))
+                            <div class="alert alert-success">
+                                {{session('thongbao')}}
+                            </div>
+                        @endif
                         <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                             <thead>
                             <tr align="center">
@@ -47,7 +51,7 @@
                             @endforeach
                             </tbody>
                         </table>
-                    <a class="btn btn-primary" href="players/add">Create new record</a>
+                        <a class="btn btn-primary" href="players/add">Create new record</a>
                     </div>
                 </div>
             </div>
