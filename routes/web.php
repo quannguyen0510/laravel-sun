@@ -22,8 +22,8 @@ Route::group(['prefix'=>'players', 'middleware'=>'auth'], function () {
     Route::get('add', 'PlayerController@create');
     Route::post('add', 'PlayerController@store');
 
-    Route::get('edit/{id}', 'PlayerController@edit');
-    Route::post('edit/{id}', 'PlayerController@update');
+    Route::get('edit/{id}', 'PlayerController@edit')->name('edit');
+    Route::post('edit/{id}', 'PlayerController@update')->name('edit');
 
     Route::get('delete/{id}', 'PlayerController@destroy');
 });

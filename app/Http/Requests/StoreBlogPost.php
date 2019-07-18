@@ -31,12 +31,4 @@ class StoreBlogPost extends FormRequest
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
-
-    public function messages()
-    {
-        return [
-            'name:max' => 'Name has maxx 255 characters',
-            'image:max' => 'Max size of name is 2MB'
-        ];
-    }
 }

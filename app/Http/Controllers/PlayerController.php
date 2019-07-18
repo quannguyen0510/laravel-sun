@@ -39,27 +39,12 @@ class PlayerController extends Controller
     public function store(StoreBlogPost $request)
     {
         //
-        $validated = $request->validated();
 
-        $player = new Player;
-        $player->name = $request->name;
-        $player->birthday = $request->birthday;
-        $player->gender = $request->gender;
-
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $name = $file->getClientOriginalName();
-            $image = str_random(4) . "_" . $name;
-            while (file_exists('upload/player' . $image)) {
-                $image = str_random(4) . "_" . $name;
-            }
-            $file->move('upload/player', $image);
-            $player->image = $image;
-        } else {
-            $player->image = "";
-        }
-
-        $player->save();
+        $player = $request->validated();
+        $image = str_random(5) . "_" . $player['image']->getClientOriginalName();
+        $player['image']->move('upload/player', $image);
+        $player['image'] = $image;
+        Player::create($player);
 
         return redirect('players/add')->with('thongbao', 'Create player success');
     }
@@ -98,29 +83,14 @@ class PlayerController extends Controller
     public function update(StoreBlogPost $request, $id)
     {
         //
-        $validated = $request->validated();
-
         $player = Player::find($id);
-        $player->name = $request->name;
-        $player->birthday = $request->birthday;
-        $player->gender = $request->gender;
+        $request = $request->validated();
+        $image = str_random(5) . "_" . $request['image']->getClientOriginalName();
+        $request['image']->move('upload/player', $image);
+        $request['image'] = $image;
+        $player->update($request);
 
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $name = $file->getClientOriginalName();
-            $image = str_random(4) . "_" . $name;
-            while (file_exists('upload/player' . $image)) {
-                $image = str_random(4) . "_" . $name;
-            }
-            $file->move('upload/player', $image);
-            $player->image = $image;
-        } else {
-
-        }
-
-        $player->save();
-
-        return redirect('players/edit/' . $id)->with('thongbao', 'Update player success');
+        return redirect()->route('edit', ['id'=>$id])->with('thongbao', 'Update player success');
     }
 
     /**
