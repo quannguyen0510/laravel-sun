@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreBlogPost;
 use Illuminate\Http\Request;
 use App\Player;
 use Illuminate\Support\Facades\Validator;
@@ -35,21 +36,10 @@ class PlayerController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreBlogPost $request)
     {
         //
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|max:255',
-            'birthday' => 'required',
-            'gender' => 'required',
-            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect('players/add')
-                ->withErrors($validator)
-                ->withInput();
-        }
+        $validated = $request->validated();
 
         $player = new Player;
         $player->name = $request->name;
@@ -72,7 +62,6 @@ class PlayerController extends Controller
         $player->save();
 
         return redirect('players/add')->with('thongbao', 'Create player success');
-
     }
 
     /**
@@ -106,21 +95,10 @@ class PlayerController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreBlogPost $request, $id)
     {
         //
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|max:255',
-            'birthday' => 'required',
-            'gender' => 'required',
-            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect('players/edit/' . $id)
-                ->withErrors($validator)
-                ->withInput();
-        }
+        $validated = $request->validated();
 
         $player = Player::find($id);
         $player->name = $request->name;
